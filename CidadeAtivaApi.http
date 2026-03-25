@@ -1,0 +1,6 @@
+@CidadeAtivaApi_HostAddress = http://localhost:5164
+
+GET {{CidadeAtivaApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

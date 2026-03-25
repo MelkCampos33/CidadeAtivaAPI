@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using CidadeAtivaApi.Models.Enum;
 
-
+// POST
 namespace CidadeAtivaApi.DTOs // DTOs (Data Transfer Objects) controlam o que entra e o que sai da API.
 {
     public class CriarProblema

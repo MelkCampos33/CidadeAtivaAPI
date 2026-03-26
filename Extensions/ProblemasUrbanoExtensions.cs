@@ -1,5 +1,6 @@
 using CidadeAtivaApi.DTOs;
 using CidadeAtivaApi.Models;
+using CidadeAtivaApi.Services;
 
 namespace CidadeAtivaApi.Extensions
 {

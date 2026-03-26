@@ -2,9 +2,7 @@ using CidadeAtivaApi.Data;
 using CidadeAtivaApi.DTOs;
 using CidadeAtivaApi.Models.Enum;
 using CidadeAtivaApi.Models;
-using CidadeAtivaApi.Models.Enum;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 using CidadeAtivaApi.Extensions;
 
 
@@ -52,6 +50,20 @@ namespace CidadeAtivaApi.Services
         }
 
             // --- CREATE ---
+            public async Task<RespostaProblemaDTO> CreateAsync(CriarProblema dto)
+        {
+            var problemaTask = new ProblamasUrbano
+            {
+                Titulo = dto.Titulo,
+                Descricao = dto.Descricao,
+                Tipo = dto.Tipo,
+                Bairro = dto.Bairro
+            };
+
+            _db.Problamas.Add(problemaTask);
+            await _db.SaveChangesAsync();
+            return Todto(problemaTask);
+        }
 
     }
 }

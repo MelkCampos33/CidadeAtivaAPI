@@ -3,8 +3,6 @@ using CidadeAtivaApi.DTOs;
 using CidadeAtivaApi.Models.Enum;
 using CidadeAtivaApi.Models;
 using Microsoft.EntityFrameworkCore;
-using CidadeAtivaApi.Extensions;
-
 
 
 namespace CidadeAtivaApi.Services
@@ -30,16 +28,23 @@ namespace CidadeAtivaApi.Services
             // Serve pra ir montando a consulta aos poucos, fazendo varios tipos de filtros diferentes
             var query = _db.Problamas.AsQueryable(); 
 
-            if (tipo.HasValue) // hasValue verifica se  a avriavel tem valor ou é null
+            if (tipo.HasValue) // hasValue verifica se  a variavel tem valor ou é null
                 query = query.Where(problema => problema.Tipo == tipo.Value);
 
             if (status.HasValue)
                 query =  query.Where(problema => problema.Status == status.Value);
 
-            return await query
+            // Busca no banco de dados
+            // 1. Ordena os dados pela data
+            // 2. Executa a query no banco
+            // 3. Mostra os dados como uma lista
+            var lista = await query 
                 .OrderByDescending(problema => problema.CriadoEm)
-                .Select(problema => problema.ToDto())
-                .ToListAsync(); 
+                .ToListAsync();
+
+            // Pecorre a lista (select) => converte cada item com "ToDto
+            // e depois retorna uma lista nova
+            return lista.Select(problema => ToDto(problema)).ToList();
         }
 
             // --- GET BY ID ---
@@ -62,8 +67,21 @@ namespace CidadeAtivaApi.Services
 
             _db.Problamas.Add(problemaTask);
             await _db.SaveChangesAsync();
-            return Todto(problemaTask);
+            return ToDto(problemaTask);
         }
+
+        // Onde é convertido a entidade em DTO de resposta
+        private static RespostaProblemaDTO ToDto(ProblamasUrbano p) => new()
+        {
+            Id = p.Id,
+            Titulo = p.Titulo,
+            Descricao = p.Descricao,
+            Tipo = p.Tipo.ToString(),
+            Status = p.Status.ToString(),
+            Bairro = p.Bairro,
+            CriadoEm = p.CriadoEm,
+            AtualizadoEm = p.AtualizadoEm
+        };
 
     }
 }

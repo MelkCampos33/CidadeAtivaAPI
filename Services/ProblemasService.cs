@@ -70,6 +70,39 @@ namespace CidadeAtivaApi.Services
             return ToDto(problemaTask);
         }
 
+        // --- UPDATE ---
+        public async Task<RespostaProblemaDTO?> UpdateAsync(Guid id, AtualizarProblema dto) 
+        {
+            // Linha do Entity Framework
+            // em SQl seria como 
+            // SELECT * FROM Problemas WHERE Id = 'seu-guid'
+            var problema = await _db.Problamas.FindAsync(id);
+            if(problema is null) return null; // validação de campo vazio
+
+            problema.Titulo = dto.Titulo;
+            problema.Descricao = dto.Descricao;
+            problema.Tipo = dto.Tipo;
+            problema.Status = dto.Status;
+            problema.Bairro =  dto.Bairro;
+            problema.AtualizadoEm = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync(); // salvando as alteraçoes no banco de dados
+            return ToDto(problema);
+        }
+
+
+        // --- DELETE ---
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var problema = await _db.Problamas.FindAsync(id);
+            if (problema is null) return false; // se caso nao achar o ID retorna false'
+
+            _db.Problamas.Remove(problema);
+            await _db.SaveChangesAsync(); // se achar ele executa o 'DELETE'
+            return true;
+        }
+
+
         // Onde é convertido a entidade em DTO de resposta
         private static RespostaProblemaDTO ToDto(ProblamasUrbano p) => new()
         {

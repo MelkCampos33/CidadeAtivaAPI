@@ -96,6 +96,7 @@ namespace CidadeAtivaApi.Services
         {
             var problema = await _db.Problamas.FindAsync(id);
             if (problema is null) return false; // se caso nao achar o ID retorna false'
+            
 
             _db.Problamas.Remove(problema);
             await _db.SaveChangesAsync(); // se achar ele executa o 'DELETE'

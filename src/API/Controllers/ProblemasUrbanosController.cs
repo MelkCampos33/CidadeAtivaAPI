@@ -14,7 +14,6 @@ namespace CidadeAtivaApi.Controllers
         public ProblemasUrbanosController(ProblemasService service) => _service = service;
 
 
-        // GET /api/problemas-urbanos/{id}
         [HttpGet]
         public async Task<IActionResult> GetAll( // Task<IActionResult>: - retorna uma resposta HTTP
             [FromQuery] TipoProblema? tipo, 
